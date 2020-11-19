@@ -61,6 +61,7 @@ class Session
     constructor: (@session_id, server) ->
         @heartbeat_delay = server.options.heartbeat_delay
         @disconnect_delay = server.options.disconnect_delay
+        @additional_headers = server.options.additional_headers || [];
         @prefix = server.options.prefix
         @send_buffer = []
         @is_closing = false
@@ -134,7 +135,7 @@ class Session
                     'x-forwarded-host', 'x-forwarded-port', \
                     'x-cluster-client-ip', 'via', 'x-real-ip', \
                     'x-forwarded-proto', 'x-ssl', 'dnt', \
-                    'host', 'user-agent', 'accept-language']
+                    'host', 'user-agent', 'accept-language'].concat(@additional_headers)
             headers[key] = req.headers[key] if req.headers[key]
         if headers
             @connection.headers = headers
